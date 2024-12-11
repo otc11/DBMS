@@ -1,0 +1,103 @@
+-- 1. Create the employee table with AUTO_INCREMENT for eid
+CREATE TABLE employee (
+    eid INTEGER PRIMARY KEY AUTOINCREMENT,
+    ename VARCHAR(100),
+    salary REAL,
+    address VARCHAR(255)
+);
+
+-- 2. Create the manager table
+CREATE TABLE manager (
+    eid INTEGER PRIMARY KEY,
+    ename VARCHAR(100)
+);
+
+-- 3. Create the project table
+CREATE TABLE project (
+    projectid INTEGER PRIMARY KEY,
+    project_name VARCHAR(100),
+    manager INTEGER,
+    FOREIGN KEY (manager) REFERENCES manager(eid)
+);
+
+-- 4. Create the assignment table
+CREATE TABLE assignment (
+    projectid INTEGER,
+    eid INTEGER,
+    PRIMARY KEY (projectid, eid),
+    FOREIGN KEY (projectid) REFERENCES project(projectid),
+    FOREIGN KEY (eid) REFERENCES employee(eid)
+);
+
+-- 5. Insert data into employee table
+INSERT INTO employee (ename, salary, address)
+VALUES 
+('Rajesh', 45000, '123 MG Road, Bengaluru'),
+('Anita', 39000, '456 Brigade Road, Mumbai'),
+('Vikram', 52000, '789 Anna Salai, Chennai'),
+('Priya', 47000, '101 Salt Lake, Kolkata'),
+('Suman', 38000, '88 Park Street, Hyderabad');
+
+-- 6. Insert data into manager table
+INSERT INTO manager (eid, ename)
+VALUES 
+(1, 'Manoj'),
+(2, 'Sunita');
+
+-- 7. Insert data into project table
+INSERT INTO project (projectid, project_name, manager)
+VALUES 
+(101, 'Bank Management', 1),
+(102, 'Content Management', 2);
+
+-- 8. Insert data into assignment table
+INSERT INTO assignment (projectid, eid)
+VALUES 
+(101, 1), -- Rajesh assigned to Bank Management
+(101, 2), -- Anita assigned to Bank Management
+(102, 3), -- Vikram assigned to Content Management
+(102, 1), -- Rajesh assigned to Content Management
+(101, 4); -- Priya assigned to Bank Management
+
+
+-- 1. Display employees working in both 'Bank Management' and 'Content Management'
+SELECT e.ename AS Employee_Name
+FROM employee e
+INNER JOIN assignment a1 ON e.eid = a1.eid
+INNER JOIN project p1 ON a1.projectid = p1.projectid
+INNER JOIN assignment a2 ON e.eid = a2.eid
+INNER JOIN project p2 ON a2.projectid = p2.projectid
+WHERE p1.project_name = 'Bank Management'
+  AND p2.project_name = 'Content Management';
+
+
+-- 2. Display average salary of the organization
+SELECT AVG(salary) AS Average_Salary
+FROM employee;
+
+
+-- 3. Display employees who do not work on 'Bank Management' Project
+SELECT e.ename AS Employee_Name
+FROM employee e
+WHERE e.eid NOT IN (
+    SELECT a.eid
+    FROM assignment a
+    INNER JOIN project p ON a.projectid = p.projectid
+    WHERE p.project_name = 'Bank Management'
+);
+
+
+-- 4. Delete employee whose id is 5
+DELETE FROM employee WHERE eid = 5;
+
+-- After deletion, check the remaining employees
+SELECT * FROM employee;
+
+
+
+-- 5. Display the employee having the highest salary in the organization
+SELECT ename AS Employee_Name, salary AS Highest_Salary
+FROM employee
+WHERE salary = (SELECT MAX(salary) FROM employee);
+
+
