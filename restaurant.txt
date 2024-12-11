@@ -1,0 +1,79 @@
+use myDatabase;
+
+db.createCollection("restaurants");
+
+db.restaurants.insertMany([
+  {
+    "RestaurantId": "R001",
+    "Name": "The Gourmet Kitchen",
+    "Cuisine": "Italian",
+    "Score": 85,
+    "Address": {
+      "Street": "123 Pasta Lane",
+      "City": "Rome",
+      "Zipcode": "10001"
+    }
+  },
+  {
+    "RestaurantId": "R002",
+    "Name": "Sushi Haven",
+    "Cuisine": "Japanese",
+    "Score": 92,
+    "Address": {
+      "Street": "456 Sashimi Ave",
+      "City": "Tokyo",
+      "Zipcode": "20002"
+    }
+  },
+  {
+    "RestaurantId": "R003",
+    "Name": "Burger Palace",
+    "Cuisine": "American",
+    "Score": 78,
+    "Address": {
+      "Street": "789 Burger Blvd",
+      "City": "New York",
+      "Zipcode": "30003"
+    }
+  },
+  {
+    "RestaurantId": "R004",
+    "Name": "Spicy Tadka",
+    "Cuisine": "Indian",
+    "Score": 88,
+    "Address": {
+      "Street": "321 Curry Road",
+      "City": "Delhi",
+      "Zipcode": "40004"
+    }
+  },
+  {
+    "RestaurantId": "R005",
+    "Name": "Dragon Wok",
+    "Cuisine": "Chinese",
+    "Score": 82,
+    "Address": {
+      "Street": "654 Noodle Street",
+      "City": "Beijing",
+      "Zipcode": "50005"
+    }
+  }
+]);
+
+db.restaurants.find();
+
+db.restaurants.find({}, { Address: 0, _id: 0 });
+
+db.restaurants.find({ Score: { $gt: 80 } });
+
+db.restaurants.find().sort({ Score: -1 }).limit(1);
+
+db.restaurants.aggregate([
+  { $group: { _id: "$Cuisine", count: { $sum: 1 } } }
+]);
+
+
+
+
+
+
