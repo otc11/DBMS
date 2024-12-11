@@ -1,0 +1,36 @@
+// Create 'zipcode' collection and insert data
+db.zipcode.insertMany([
+    { city: "Mumbai", state: "Maharashtra", population: 12478447 },
+    { city: "Delhi", state: "Delhi", population: 11007835 },
+    { city: "Bangalore", state: "Karnataka", population: 8436675 },
+    { city: "Hyderabad", state: "Telangana", population: 6809970 },
+    { city: "Ahmedabad", state: "Gujarat", population: 5577940 },
+    { city: "Chennai", state: "Tamil Nadu", population: 7090000 },
+    { city: "Kolkata", state: "West Bengal", population: 4486679 },
+    { city: "Pune", state: "Maharashtra", population: 3124458 },
+    { city: "Surat", state: "Gujarat", population: 4467797 },
+    { city: "Jaipur", state: "Rajasthan", population: 3073350 }
+]);
+
+db.zipcode.find();
+
+db.zipcode.aggregate([
+    { $group: { _id: "$state", totalPopulation: { $sum: "$population" } } }
+]);
+
+db.zipcode.aggregate([
+    { $group: { _id: "$state", totalPopulation: { $sum: "$population" } } },
+    { $match: { totalPopulation: { $gt: 20000 } } }
+]);
+
+db.zipcode.createIndex({ state: 1 });
+
+db.zipcode.getIndexes();
+
+
+
+
+
+
+
+
